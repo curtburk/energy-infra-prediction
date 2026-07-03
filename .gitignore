@@ -1,0 +1,71 @@
+cat > ~/Desktop/DoE-demo/.gitignore << 'EOF'
+# ============================================================================
+# Grid Anomaly Prediction — .gitignore
+# ============================================================================
+
+# ----- Python -----
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.egg
+dist/
+build/
+.venv/
+venv/
+
+# ----- Data (generated at runtime, not committed) -----
+data/
+
+# ----- Models (too large for git — download via scripts/download_models.sh) -----
+*.safetensors
+*.bin
+*.gguf
+*.pt
+*.pth
+*.ckpt
+
+# ----- HuggingFace cache -----
+.cache/
+
+# ----- Node / Frontend -----
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+
+# ----- Environment / Secrets -----
+.env
+.env.*
+!.env.example
+
+# ----- Logs and PIDs -----
+*.log
+*.pid
+nohup.out
+
+# ----- IDE -----
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ----- OS -----
+.DS_Store
+Thumbs.db
+
+# ----- Docker -----
+.docker/
+
+# ----- Testing -----
+.pytest_cache/
+.coverage
+htmlcov/
+
+# ----- Videos in data directories (large, regenerated) -----
+# But KEEP frontend/public/demos/*.mp4 (pre-rendered Quick Demo assets)
+data/**/*.mp4
+
+# ----- Temporary files -----
+/tmp/
+*.tmp
+EOF

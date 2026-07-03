@@ -1,0 +1,82 @@
+# ============================================================================
+# Grid Infrastructure Anomaly Prediction — Docker Compose
+# ============================================================================
+# Usage:
+#   Mock mode (no GPU):  docker-compose up --build
+#   GPU mode:            docker-compose --profile gpu up --build
+#   With frontend:       docker-compose --profile frontend up --build
+# ============================================================================
+
+services:
+  # --- Backend API (mock mode) ---
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: base
+    ports:
+      - "${PORT:-8094}:8094"
+    environment:
+      - MOCK_MODELS=true
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - HOST=0.0.0.0
+      - PORT=8094
+    volumes:
+      - ./data:/app/data
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8094/api/v1/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+
+  # --- Backend API (GPU mode) ---
+  backend-gpu:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: gpu
+    profiles:
+      - gpu
+    ports:
+      - "${PORT:-8094}:8094"
+    environment:
+      - MOCK_MODELS=false
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - HOST=0.0.0.0
+      - PORT=8094
+    volumes:
+      - ./data:/app/data
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8094/api/v1/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
+    restart: unless-stopped
+
+  # --- Frontend (dev mode — enable with --profile frontend) ---
+  frontend:
+    image: node:20-slim
+    profiles:
+      - frontend
+    working_dir: /app
+    ports:
+      - "${FRONTEND_PORT:-5173}:5173"
+    volumes:
+      - ./frontend:/app
+    command: >
+      sh -c "
+        if [ ! -d node_modules ]; then npm install; fi &&
+        npm run dev -- --host 0.0.0.0
+      "
+    depends_on:
+      - backend
