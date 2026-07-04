@@ -2,7 +2,7 @@
 
 **On-premises AI for predicting equipment degradation in electrical substation infrastructure.**
 
-Uses NVIDIA Cosmos AI models on HP ZGX Nano hardware to detect anomalies, classify degradation, and generate AI-predicted degradation visualizations — all without cloud dependencies. Sensitive infrastructure data never leaves the device.
+Uses NVIDIA Cosmos AI models on HP ZGX Nano hardware to detect anomalies, classify degradation, and generate AI-predicted degradation visualizations - all without cloud dependencies. Sensitive infrastructure data never leaves the device.
 
 **Target audience:** US Department of Energy / Sandia National Laboratories
 
