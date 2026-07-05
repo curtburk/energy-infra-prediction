@@ -40,7 +40,7 @@ Upload Video → Cosmos-Reason1-7B (detect equipment via vLLM)
 
 ### Why Cosmos3-Nano Instead of Cosmos-Predict2.5?
 
-The original spec called for Cosmos-Predict2.5-2B (Video2World), which conditions future video on your actual input footage. However, Cosmos-Predict2.5 has hard dependencies (`transformer_engine`, `flash-attn`) that [are not available on ARM64/aarch64](https://github.com/nvidia-cosmos/cosmos-predict2.5/issues/120). This is a known issue affecting DGX Spark and ZGX Nano.
+The original spec called for Cosmos-Predict2.5-2B (Video2World), which conditions future video on your actual input footage. However, Cosmos-Predict2.5 has hard dependencies (`transformer_engine`) that [are not available on ARM64/aarch64](https://github.com/nvidia-cosmos/cosmos-predict2.5/issues/120). This is a known issue affecting DGX Spark and ZGX Nano.
 
 Cosmos3-Nano generates degradation videos from text prompts via standard HuggingFace diffusers — no custom NVIDIA packages required. The generated videos are illustrative visualizations of how detected anomalies would progress, not pixel-level predictions of the specific equipment. The detection, classification, health scores, and TTF estimates from Cosmos-Reason1-7B are real analysis of the uploaded footage.
 
